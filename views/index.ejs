@@ -1,7 +1,6 @@
 <%- include('partials/header') %>
 
 <style>
-    /* HERO SECTION */
     .hero {
         text-align: center;
         padding: 50px 20px 30px;
@@ -49,7 +48,6 @@
     }
     .btn-secondary-hero:hover { background: #484f58; }
 
-    /* STATISTIK CARDS */
     .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -81,7 +79,6 @@
         margin-top: 5px;
     }
 
-    /* REAL INFO BAR */
     .info-bar {
         background: #161b22;
         border: 1px solid #30363d;
@@ -103,23 +100,6 @@
         margin-right: 5px;
     }
 
-    /* BATTERY STYLE */
-    .battery-display {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .battery-icon {
-        font-size: 20px;
-    }
-    .battery-level {
-        font-weight: bold;
-    }
-    .battery-level.low { color: #da3633; }
-    .battery-level.medium { color: #f0e68c; }
-    .battery-level.high { color: #238636; }
-
-    /* FITUR SECTION */
     .features {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -147,7 +127,6 @@
         font-size: 14px;
     }
 
-    /* PROFILE SECTION (Jika user login) */
     .profile-container {
         max-width: 600px;
         margin: 0 auto;
@@ -179,7 +158,6 @@
         font-size: 16px;
     }
 
-    /* LIGHT THEME OVERRIDES */
     body.light-theme {
         background: #f0f2f5;
         color: #1a1a2e;
@@ -224,13 +202,6 @@
         color: #6c63ff;
     }
 
-    /* UPTIME DISPLAY */
-    .uptime-display {
-        font-family: 'Consolas', monospace;
-        color: #58a6ff;
-    }
-
-    /* THEME TOGGLE */
     .theme-toggle {
         position: fixed;
         bottom: 20px;
@@ -251,7 +222,6 @@
         transform: scale(1.1);
     }
 
-    /* Responsive */
     @media (max-width: 600px) {
         .info-bar {
             flex-direction: column;
@@ -281,7 +251,6 @@
     <% } %>
 </div>
 
-<!-- INFO BAR REAL -->
 <div class="info-bar">
     <span><i class="fas fa-server"></i> Uptime: <strong class="uptime-display" id="uptimeDisplay"><%= stats.uptime %></strong></span>
     <span><i class="fas fa-globe-asia"></i> Lokasi: <strong><%= stats.location %></strong></span>
@@ -289,11 +258,9 @@
     <span><i class="fas fa-clock"></i> Latency: <strong><%= stats.latency %></strong></span>
     <span><i class="fas fa-code"></i> Total Endpoint: <strong><%= stats.endpoint %></strong></span>
     <span><i class="fas fa-folder"></i> Kategori: <strong><%= stats.totalCategories %></strong></span>
-    <span><i class="fas fa-battery-three-quarters"></i> Baterai HP: <strong class="battery-display" id="batteryDisplay">Loading...</strong></span>
 </div>
 
 <% if (user) { %>
-    <!-- TAMPILAN PROFIL (Jika User Login) -->
     <div class="profile-container">
         <div class="profile-header">
             <div class="profile-avatar">
@@ -308,7 +275,6 @@
         </div>
     </div>
 <% } else { %>
-    <!-- TAMPILAN BERANDA (Jika Guest) -->
     <div class="stats-grid">
         <div class="stat-card">
             <div class="icon"><i class="fas fa-code"></i></div>
@@ -362,13 +328,7 @@
     </div>
 <% } %>
 
-<!-- THEME TOGGLE BUTTON -->
-<button class="theme-toggle" onclick="toggleTheme()" title="Ganti Tema">
-    <i class="fas fa-moon" id="themeIcon"></i>
-</button>
-
 <script>
-    // ==================== UPTIME REAL-TIME ====================
     function updateUptime() {
         fetch('/api/server-info')
             .then(res => res.json())
@@ -377,82 +337,10 @@
                     document.getElementById('uptimeDisplay').textContent = data.server.uptime;
                 }
             })
-            .catch(err => {
-                console.error('Uptime error:', err);
-            });
+            .catch(err => console.error('Uptime error:', err));
     }
-    // Update uptime setiap 5 detik
     updateUptime();
     setInterval(updateUptime, 5000);
-
-    // ==================== BATTERY HP REAL-TIME ====================
-    function updateBattery() {
-        if (navigator.getBattery) {
-            navigator.getBattery().then(battery => {
-                const level = Math.round(battery.level * 100);
-                const charging = battery.charging;
-                const batteryDisplay = document.getElementById('batteryDisplay');
-                
-                let icon = 'fa-battery-three-quarters';
-                let colorClass = 'high';
-                
-                if (level <= 20) {
-                    icon = 'fa-battery-quarter';
-                    colorClass = 'low';
-                } else if (level <= 50) {
-                    icon = 'fa-battery-half';
-                    colorClass = 'medium';
-                } else if (level <= 80) {
-                    icon = 'fa-battery-three-quarters';
-                    colorClass = 'high';
-                } else {
-                    icon = 'fa-battery-full';
-                    colorClass = 'high';
-                }
-                
-                if (charging) {
-                    icon = 'fa-bolt';
-                    colorClass = 'high';
-                }
-                
-                batteryDisplay.innerHTML = `
-                    <i class="fas ${icon} battery-icon"></i>
-                    <span class="battery-level ${colorClass}">${level}% ${charging ? '(Charging)' : ''}</span>
-                `;
-                
-                // Update saat baterai berubah
-                battery.addEventListener('levelchange', updateBattery);
-                battery.addEventListener('chargingchange', updateBattery);
-            });
-        } else {
-            document.getElementById('batteryDisplay').textContent = 'Tidak didukung';
-        }
-    }
-    updateBattery();
-
-    // ==================== THEME TOGGLE ====================
-    function toggleTheme() {
-        const body = document.body;
-        const icon = document.getElementById('themeIcon');
-        
-        if (body.classList.contains('light-theme')) {
-            body.classList.remove('light-theme');
-            icon.className = 'fas fa-moon';
-            localStorage.setItem('theme', 'dark');
-        } else {
-            body.classList.add('light-theme');
-            icon.className = 'fas fa-sun';
-            localStorage.setItem('theme', 'light');
-        }
-    }
-    // Load saved theme
-    document.addEventListener('DOMContentLoaded', function() {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            document.body.classList.add('light-theme');
-            document.getElementById('themeIcon').className = 'fas fa-sun';
-        }
-    });
 </script>
 
 <%- include('partials/footer') %>
