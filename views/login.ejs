@@ -1,0 +1,235 @@
+<%- include('partials/header') %>
+
+<style>
+    body.login-page {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    
+    .login-wrapper {
+        margin-left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #6c63ff, #3b3b98);
+        padding: 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9999;
+    }
+
+    .auth-container {
+        max-width: 420px;
+        width: 100%;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .auth-header {
+        background: linear-gradient(135deg, #6c63ff, #3b3b98);
+        color: white;
+        padding: 40px 30px 30px;
+        text-align: center;
+        border-radius: 0;
+    }
+
+    .auth-header i {
+        font-size: 50px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .auth-header h2 {
+        margin: 10px 0 5px;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .auth-header p {
+        margin: 0;
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    .auth-body {
+        padding: 30px;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 14px 15px 14px 45px;
+        border: 2px solid #e1e5e9;
+        border-radius: 10px;
+        font-size: 15px;
+        transition: 0.3s;
+        background: #f8f9fa;
+        outline: none;
+        color: #333;
+    }
+
+    .input-group input:focus {
+        border-color: #6c63ff;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+    }
+
+    .input-group i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c63ff;
+        font-size: 18px;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #6c63ff, #3b3b98);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(108, 99, 255, 0.3);
+    }
+
+    .auth-footer {
+        text-align: center;
+        padding: 0 30px 30px;
+    }
+
+    .auth-footer a {
+        color: #6c63ff;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+    .auth-footer a:hover {
+        text-decoration: underline;
+    }
+
+    .error-msg {
+        background: #fee;
+        color: #d63031;
+        padding: 12px 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        text-align: center;
+        border: 1px solid #fab1a0;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #999;
+        font-size: 18px;
+    }
+    .password-toggle:hover {
+        color: #6c63ff;
+    }
+
+    @media (max-width: 480px) {
+        .auth-container {
+            margin: 20px;
+        }
+        .auth-header {
+            padding: 30px 20px 25px;
+        }
+        .auth-body {
+            padding: 20px;
+        }
+        .auth-footer {
+            padding: 0 20px 20px;
+        }
+    }
+</style>
+
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eye-icon');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.className = 'fas fa-eye';
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.className = 'fas fa-eye-slash';
+        }
+    }
+</script>
+
+<div class="login-wrapper">
+    <div class="auth-container">
+        <div class="auth-header">
+            <i class="fas fa-shield-alt"></i>
+            <h2>Login</h2>
+            <p>Masuk ke akun Anda untuk mengakses fitur lengkap</p>
+        </div>
+        
+        <div class="auth-body">
+            <% if (error) { %>
+                <div class="error-msg">
+                    <i class="fas fa-exclamation-circle"></i> <%= error %>
+                </div>
+            <% } %>
+            
+            <form action="/login" method="POST">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" id="password" placeholder="Password" required>
+                    <span class="password-toggle" onclick="togglePassword()">
+                        <i class="fas fa-eye-slash" id="eye-icon"></i>
+                    </span>
+                </div>
+                
+                <button type="submit" class="btn-login">
+                    <i class="fas fa-arrow-right"></i> Login
+                </button>
+            </form>
+        </div>
+        
+        <div class="auth-footer">
+            <p>Belum punya akun? <a href="/register">Daftar Sekarang</a></p>
+            <p style="margin-top: 5px; font-size: 13px;">
+                <a href="#" style="font-weight: normal; color: #999;">Lupa Kata Sandi?</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
