@@ -1,0 +1,234 @@
+<%- include('partials/header') %>
+
+<style>
+    body.verify-page {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    
+    .verify-wrapper {
+        margin-left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #6c63ff, #3b3b98);
+        padding: 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9999;
+    }
+
+    .auth-container {
+        max-width: 450px;
+        width: 100%;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        overflow: hidden;
+    }
+
+    .auth-header {
+        background: linear-gradient(135deg, #6c63ff, #3b3b98);
+        color: white;
+        padding: 40px 30px 30px;
+        text-align: center;
+    }
+
+    .auth-header i {
+        font-size: 50px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .auth-header h2 {
+        margin: 10px 0 5px;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .auth-header p {
+        margin: 0;
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    .auth-body {
+        padding: 30px;
+        text-align: center;
+    }
+
+    .auth-body .icon-big {
+        font-size: 80px;
+        color: #6c63ff;
+        margin-bottom: 20px;
+        display: block;
+    }
+
+    .auth-body h3 {
+        color: #2d3436;
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+
+    .auth-body p {
+        color: #636e72;
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .auth-body .info-box {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 15px 0;
+        border-left: 4px solid #6c63ff;
+        text-align: left;
+    }
+
+    .auth-body .info-box strong {
+        color: #2d3436;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #6c63ff, #3b3b98);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        box-sizing: border-box;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(108, 99, 255, 0.3);
+    }
+
+    .btn-secondary {
+        width: 100%;
+        padding: 14px;
+        background: #dfe6e9;
+        color: #2d3436;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        box-sizing: border-box;
+        margin-top: 10px;
+    }
+
+    .btn-secondary:hover {
+        background: #b2bec3;
+    }
+
+    .auth-footer {
+        text-align: center;
+        padding: 0 30px 30px;
+    }
+
+    .auth-footer a {
+        color: #6c63ff;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .success-msg {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        text-align: center;
+        border: 1px solid #c3e6cb;
+    }
+
+    @media (max-width: 480px) {
+        .auth-container {
+            margin: 20px;
+        }
+        .auth-header {
+            padding: 30px 20px 25px;
+        }
+        .auth-body {
+            padding: 20px;
+        }
+        .auth-footer {
+            padding: 0 20px 20px;
+        }
+    }
+</style>
+
+<div class="verify-wrapper">
+    <div class="auth-container">
+        <div class="auth-header">
+            <i class="fas fa-envelope-open-text"></i>
+            <h2>Verifikasi Email</h2>
+            <p>Langkah terakhir untuk mengaktifkan akun Anda</p>
+        </div>
+        
+        <div class="auth-body">
+            <% if (message) { %>
+                <div class="success-msg">
+                    <i class="fas fa-check-circle"></i> 
+                    <%= message %>
+                </div>
+            <% } %>
+            
+            <i class="fas fa-envelope icon-big"></i>
+            
+            <h3>Cek Kotak Masuk Anda</h3>
+            
+            <p>
+                Kami telah mengirim kode verifikasi ke <strong style="color:#6c63ff;"><%= email %></strong>.
+                Silakan buka email Anda dan klik link verifikasi yang kami kirimkan.
+            </p>
+            
+            <div class="info-box">
+                <p style="margin: 0;">
+                    <strong>📧 Tidak menerima email?</strong><br>
+                    <span style="font-size: 14px;">
+                        Cek folder <strong>Spam</strong> atau <strong>Promotions</strong> di Gmail Anda.<br>
+                        Jika masih belum ada, klik tombol "Kirim Ulang" di bawah.
+                    </span>
+                </p>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <a href="/login" class="btn-primary">
+                    <i class="fas fa-arrow-right"></i> Sudah Verifikasi? Login
+                </a>
+                
+                <form action="/resend-otp" method="POST" style="margin-top: 10px;">
+                    <input type="hidden" name="email" value="<%= email %>">
+                    <button type="submit" class="btn-secondary">
+                        <i class="fas fa-redo"></i> Kirim Ulang Kode
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="auth-footer">
+            <p>Butuh bantuan? <a href="#">Hubungi Support</a></p>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
