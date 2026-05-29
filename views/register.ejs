@@ -1,0 +1,207 @@
+<%- include('partials/header') %>
+
+<style>
+    body.register-page {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    
+    .register-wrapper {
+        margin-left: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #6c63ff, #3b3b98);
+        padding: 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9999;
+    }
+
+    .auth-container {
+        max-width: 420px;
+        width: 100%;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        overflow: hidden;
+    }
+
+    .auth-header {
+        background: linear-gradient(135deg, #6c63ff, #3b3b98);
+        color: white;
+        padding: 40px 30px 30px;
+        text-align: center;
+    }
+
+    .auth-header i {
+        font-size: 50px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .auth-header h2 {
+        margin: 10px 0 5px;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .auth-header p {
+        margin: 0;
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    .auth-body {
+        padding: 30px;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 14px 15px 14px 45px;
+        border: 2px solid #e1e5e9;
+        border-radius: 10px;
+        font-size: 15px;
+        transition: 0.3s;
+        background: #f8f9fa;
+        outline: none;
+        color: #333;
+    }
+
+    .input-group input:focus {
+        border-color: #6c63ff;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+    }
+
+    .input-group i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c63ff;
+        font-size: 18px;
+    }
+
+    .btn-register {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #6c63ff, #3b3b98);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(108, 99, 255, 0.3);
+    }
+
+    .auth-footer {
+        text-align: center;
+        padding: 0 30px 30px;
+    }
+
+    .auth-footer a {
+        color: #6c63ff;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .error-msg {
+        background: #fee;
+        color: #d63031;
+        padding: 12px 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        text-align: center;
+        border: 1px solid #fab1a0;
+    }
+
+    .success-msg {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        text-align: center;
+        border: 1px solid #c3e6cb;
+    }
+
+    @media (max-width: 480px) {
+        .auth-container {
+            margin: 20px;
+        }
+        .auth-header {
+            padding: 30px 20px 25px;
+        }
+        .auth-body {
+            padding: 20px;
+        }
+        .auth-footer {
+            padding: 0 20px 20px;
+        }
+    }
+</style>
+
+<div class="register-wrapper">
+    <div class="auth-container">
+        <div class="auth-header">
+            <i class="fas fa-user-plus"></i>
+            <h2>Daftar Akun</h2>
+            <p>Buat akun untuk mulai menggunakan API</p>
+        </div>
+        
+        <div class="auth-body">
+            <% if (message) { %>
+                <div class="<%= message.includes('Gagal') || message.includes('sudah') ? 'error-msg' : 'success-msg' %>">
+                    <i class="fas fa-<%= message.includes('Gagal') || message.includes('sudah') ? 'exclamation-circle' : 'check-circle' %>"></i> 
+                    <%= message %>
+                </div>
+            <% } %>
+            
+            <form action="/register" method="POST">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" placeholder="Password (min 6 karakter)" required minlength="6">
+                </div>
+                
+                <button type="submit" class="btn-register">
+                    <i class="fas fa-user-plus"></i> Daftar & Kirim OTP
+                </button>
+            </form>
+        </div>
+        
+        <div class="auth-footer">
+            <p>Sudah punya akun? <a href="/login">Login</a></p>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
