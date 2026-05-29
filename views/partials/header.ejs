@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xyroo Api's</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #0d1117; 
+            color: #c9d1d9; 
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            background: #161b22;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-bar .brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #58a6ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: #c9d1d9;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+        .menu-btn:hover { background: #30363d; color: #58a6ff; }
+
+        .sidebar {
+            width: 250px;
+            background: #161b22;
+            color: #8b949e;
+            height: 100vh;
+            padding: 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            border-right: 1px solid #30363d;
+            z-index: 999;
+            overflow-y: auto;
+            transform: translateX(0);
+            transition: 0.3s;
+        }
+        .sidebar.hidden { transform: translateX(-250px); }
+
+        .sidebar h3 {
+            color: #f0f6fc;
+            font-size: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar h3 i { color: #58a6ff; }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-bottom: 2px;
+        }
+        .sidebar ul li:hover { background: #30363d; color: #f0f6fc; }
+        .sidebar ul li.active { background: #6c63ff; color: white; }
+        .sidebar ul li a {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar ul li i { width: 20px; text-align: center; }
+        .sidebar .category-label {
+            color: #6c63ff;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+        .main-content.expanded { margin-left: 0; }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #6c63ff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+            transition: 0.3s;
+            z-index: 999;
+        }
+        .theme-toggle:hover { transform: scale(1.1); }
+
+        body.light-theme {
+            background: #f0f2f5;
+            color: #1a1a2e;
+        }
+        body.light-theme .top-bar {
+            background: white;
+            border-color: #e1e5e9;
+        }
+        body.light-theme .sidebar {
+            background: white;
+            border-color: #e1e5e9;
+        }
+        body.light-theme .sidebar h3 {
+            color: #1a1a2e;
+        }
+        body.light-theme .sidebar ul li:hover {
+            background: #f0f2f5;
+            color: #1a1a2e;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-250px); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <button class="menu-btn" onclick="toggleSidebar()" title="Toggle Sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="brand">
+            <i class="fas fa-code"></i> Xyroo Api's
+        </div>
+    </div>
+    <div></div>
+</div>
+
+<div class="sidebar" id="sidebar">
+    <h3><i class="fas fa-code"></i> Xyroo Api's</h3>
+    <ul>
+        <li class="<%= typeof currentPage !== 'undefined' && currentPage === 'home' ? 'active' : '' %>">
+            <a href="/"><i class="fas fa-home"></i> Beranda</a>
+        </li>
+        <li class="<%= typeof currentPage !== 'undefined' && currentPage === 'docs' ? 'active' : '' %>">
+            <a href="/doc/get"><i class="fas fa-file-alt"></i> Dokumentasi API</a>
+        </li>
+        <li class="<%= typeof currentPage !== 'undefined' && currentPage === 'profile' ? 'active' : '' %>">
+            <a href="/profile"><i class="fas fa-user"></i> Profil</a>
+        </li>
+        <li class="category-label">
+            <i class="fas fa-layer-group"></i> KATEGORI API
+        </li>
+        <li><a href="#"><i class="fas fa-robot"></i> AI</a></li>
+        <li><a href="#"><i class="fas fa-newspaper"></i> BERITA</a></li>
+        <li><a href="#"><i class="fas fa-paint-brush"></i> KANVAS</a></li>
+        <li><a href="#"><i class="fas fa-gamepad"></i> PERMAINAN</a></li>
+        <li><a href="#"><i class="fab fa-tiktok"></i> TIKTOK</a></li>
+    </ul>
+    <div style="position:absolute; bottom:20px; width:calc(100% - 40px);">
+        <% if (typeof user !== 'undefined' && user) { %>
+            <a href="/profile" style="display:block; text-align:center; padding:10px; background:#6c63ff; color:white; border-radius:8px; text-decoration:none; margin-bottom:10px;">
+                <i class="fas fa-user"></i> Profil
+            </a>
+            <a href="/logout" style="display:block; text-align:center; padding:10px; background:#da3633; color:white; border-radius:8px; text-decoration:none;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        <% } else { %>
+            <a href="/login" style="display:block; text-align:center; padding:10px; border:1px solid #6c63ff; border-radius:8px; color:#6c63ff; text-decoration:none;">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+        <% } %>
+    </div>
+</div>
+
+<div class="main-content" id="mainContent">
+
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('hidden');
+        document.getElementById('mainContent').classList.toggle('expanded');
+    }
+
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.getElementById('themeIcon');
+        if (body.classList.contains('light-theme')) {
+            body.classList.remove('light-theme');
+            if (icon) icon.className = 'fas fa-moon';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            body.classList.add('light-theme');
+            if (icon) icon.className = 'fas fa-sun';
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-theme');
+        }
+    });
+
+    if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.add('hidden');
+        document.getElementById('mainContent').classList.add('expanded');
+    }
+</script>
