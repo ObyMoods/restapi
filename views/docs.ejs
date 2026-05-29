@@ -590,7 +590,7 @@
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
         resultBox.style.display = 'block';
-        resultContent.textContent = 'Mengambil data...';
+        resultContent.textContent = 'Loading...';
 
         let url = `${BASE_URL}${endpoint}?apikey=${apikey}`;
         if (query) url += `&query=${encodeURIComponent(query)}`;
@@ -622,9 +622,9 @@
         }
 
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mencari...';
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
         resultBox.style.display = 'block';
-        resultContent.textContent = `Mencari user @${username} ...`;
+        resultContent.textContent = 'Loading...';
 
         fetch(`${BASE_URL}/api/stalk/tiktok?username=${encodeURIComponent(username)}&apikey=${apikey}`)
             .then(res => res.json())
